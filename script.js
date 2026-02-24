@@ -3,16 +3,16 @@
 ================================ */
 
 const afinidades = {
-    Geoventis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Ignivita: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Aqualis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Nousomir: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Obscurnis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Radiaris: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Ampérion: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Kenobaryx: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Zoëris: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
-    Anthonum: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 }
+    Verde_Geoventis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Rojo_Ignivita: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Azul_Aqualis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Violeta_Nousomir: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Negro_Obscurnis: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Ámbar_Radiaris: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Amarillo_Ampérion: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Blanco_Kenobaryx: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Rosa_Zoëris: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 },
+    Gris_Marron_Anthonum: { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 }
 };
 
 /* ================================
@@ -93,7 +93,7 @@ function calcularResultadosFinal() {
         const nombre = item[0];
         const puntuacion = item[1].total;
         if (nombre !== principal[0] && (!secundaria || nombre !== secundaria[0])) {
-            if (puntuacion >= 18.5) {
+            if (puntuacion >= 16.5) {
                 if (aurasActivas < 2) latentesDespertables.push(nombre);
                 else latentesBloqueadas.push(nombre);
             }
