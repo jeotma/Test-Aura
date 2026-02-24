@@ -1,0 +1,12 @@
+(function() {
+    const preguntas = document.querySelectorAll('.pregunta');
+    preguntas.forEach(div => {
+        const radios = div.querySelectorAll('input[type="radio"]');
+        if (radios.length > 0) {
+            const azar = Math.floor(Math.random() * radios.length);
+            radios[azar].checked = true;
+        }
+    });
+    document.getElementById('btnFinalizar').click();
+    console.log("¡Test completado aleatoriamente!");
+})();
