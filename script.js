@@ -16,31 +16,34 @@ const afinidades = {
 };
 
 /* ================================
-   SUMAR PUNTOS
+   LÓGICA DE SUMA DE PUNTOS
 ================================ */
 function sumarAfinidades(tipos) {
     const valores = Object.values(tipos);
     const maxValor = Math.max(...valores);
-    const segundoValor = valores.filter(v => v < maxValor).sort((a,b)=>b-a)[0] || 0;
+    
+    // Si todos los valores son iguales, el segundo valor se considera el mismo para evitar errores
+    const valoresMenores = valores.filter(v => v < maxValor);
+    const segundoValor = valoresMenores.length > 0 ? Math.max(...valoresMenores) : maxValor;
 
     for (let clave in tipos) {
         if (afinidades.hasOwnProperty(clave)) {
             const val = tipos[clave];
             afinidades[clave].total += val;
             if (val === maxValor) afinidades[clave].maxCount += 1;
-            if (val === segundoValor) afinidades[clave].secondMaxCount += 1;
+            if (val === segundoValor && valoresMenores.length > 0) afinidades[clave].secondMaxCount += 1;
             if (val >= 1) afinidades[clave].highScoreCount += 1;
         }
     }
 }
 
 /* ================================
-   FUNCION FINAL PARA RESULTADO
+   CÁLCULO FINAL DE RESULTADOS
 ================================ */
 function calcularResultadosFinal() {
-
     const arr = Object.entries(afinidades);
 
+    // Función de prioridad para desempates
     function desempate(a, b) {
         if (b[1].total !== a[1].total) return b[1].total - a[1].total;
         if (b[1].maxCount !== a[1].maxCount) return b[1].maxCount - a[1].maxCount;
@@ -49,103 +52,109 @@ function calcularResultadosFinal() {
         return 0;
     }
 
-    const ordenadas = arr.sort(desempate);
+    const ordenadas = [...arr].sort(desempate);
 
-    // -----------------------------
-    // PRIMARIA
-    // -----------------------------
+    // 1. DETERMINAR PRINCIPAL
     let principal = ordenadas[0];
-    let candidatosEmpate = ordenadas.filter(item => item[1].total === principal[1].total);
-    if (candidatosEmpate.length > 1) {
-        candidatosEmpate.sort(desempate);
-        const maxValor = candidatosEmpate[0][1];
-        const ultimosEmpatados = candidatosEmpate.filter(item =>
-            item[1].total === maxValor.total &&
-            item[1].maxCount === maxValor.maxCount &&
-            item[1].secondMaxCount === maxValor.secondMaxCount &&
-            item[1].highScoreCount === maxValor.highScoreCount
-        );
-        principal = ultimosEmpatados.length > 1 ?
-            ultimosEmpatados[Math.floor(Math.random() * ultimosEmpatados.length)] :
-            ultimosEmpatados[0];
+    let candidatosEmpatePrincipal = ordenadas.filter(item => 
+        item[1].total === principal[1].total && desempate(item, principal) === 0
+    );
+    
+    if (candidatosEmpatePrincipal.length > 1) {
+        principal = candidatosEmpatePrincipal[Math.floor(Math.random() * candidatosEmpatePrincipal.length)];
     }
 
-    // -----------------------------
-    // SECUNDARIA
-    // -----------------------------
+    // 2. DETERMINAR SECUNDARIA
     let secundaria = null;
-    const diferencia = principal[1].total - ordenadas[1][1].total;
+    // Solo buscamos secundaria si no es el mismo aura que la principal y la diferencia es <= 1
+    let candidatosSecundaria = ordenadas.filter(item => {
+        const esDiferente = item[0] !== principal[0];
+        const diferenciaCorta = (principal[1].total - item[1].total) <= 1;
+        return esDiferente && diferenciaCorta;
+    });
 
-    if (diferencia <= 1) {
-        let candidatosSec = ordenadas.filter(item =>
-            item[0] !== principal[0] &&
-            (principal[1].total - item[1].total) <= 1
-        );
-
-        if (candidatosSec.length > 1) {
-            candidatosSec.sort(desempate);
-            const maxValorSec = candidatosSec[0][1];
-            const ultimosEmpatadosSec = candidatosSec.filter(item =>
-                item[1].total === maxValorSec.total &&
-                item[1].maxCount === maxValorSec.maxCount &&
-                item[1].secondMaxCount === maxValorSec.secondMaxCount &&
-                item[1].highScoreCount === maxValorSec.highScoreCount
-            );
-            secundaria = ultimosEmpatadosSec.length > 1 ?
-                ultimosEmpatadosSec[Math.floor(Math.random() * ultimosEmpatadosSec.length)] :
-                ultimosEmpatadosSec[0];
-        } else if (candidatosSec.length === 1) {
-            secundaria = candidatosSec[0];
-        }
+    if (candidatosSecundaria.length > 0) {
+        candidatosSecundaria.sort(desempate);
+        const mejorSecundaria = candidatosSecundaria[0];
+        
+        // Manejo de empate en la secundaria
+        let empatadosSec = candidatosSecundaria.filter(item => desempate(item, mejorSecundaria) === 0);
+        secundaria = empatadosSec.length > 1 ? 
+            empatadosSec[Math.floor(Math.random() * empatadosSec.length)] : 
+            mejorSecundaria;
     }
 
-    // -----------------------------
-    // LATENTES
-    // -----------------------------
+    // 3. DETERMINAR LATENTES
     let latentesDespertables = [];
     let latentesBloqueadas = [];
-    const aurasActivas = [principal, secundaria].filter(Boolean).length;
+    const aurasActivas = secundaria ? 2 : 1;
 
-    for (let i = 0; i < ordenadas.length; i++) {
-        const nombre = ordenadas[i][0];
-        const puntuacion = ordenadas[i][1].total;
-        const esPrincipal = nombre === principal[0];
-        const esSecundaria = secundaria && nombre === secundaria[0];
-
-        if (!esPrincipal && !esSecundaria && puntuacion >= 18.5) {
-            if (aurasActivas < 2) {
-                latentesDespertables.push(nombre);
-            } else {
-                latentesBloqueadas.push(nombre);
+    ordenadas.forEach(item => {
+        const nombre = item[0];
+        const puntuacion = item[1].total;
+        if (nombre !== principal[0] && (!secundaria || nombre !== secundaria[0])) {
+            if (puntuacion >= 18.5) {
+                if (aurasActivas < 2) latentesDespertables.push(nombre);
+                else latentesBloqueadas.push(nombre);
             }
         }
-    }
+    });
 
     return {
         principal: principal[0],
-        puntuacionPrincipal: principal[1].total,
         secundaria: secundaria ? secundaria[0] : null,
-        puntuacionSecundaria: secundaria ? secundaria[1].total : null,
-        latentesDespertables: latentesDespertables,
-        latentesBloqueadas: latentesBloqueadas,
-        rankingCompleto: ordenadas.map(x => ({ nombre: x[0], total: x[1].total }))
+        latentesDespertables,
+        latentesBloqueadas,
+        ranking: ordenadas
     };
 }
 
 /* ================================
-   FUNCIONES AUXILIARES
+   INTERACCIÓN CON EL DOM
 ================================ */
-function obtenerPorcentajes() {
-    const total = Object.values(afinidades).reduce((acc, val) => acc + val.total, 0);
-    let porcentajes = {};
-    for (let clave in afinidades) {
-        porcentajes[clave] = ((afinidades[clave].total / total) * 100).toFixed(2);
-    }
-    return porcentajes;
-}
-
-function resetearAfinidades() {
+document.getElementById('btnFinalizar').addEventListener('click', () => {
+    // Resetear puntuaciones para permitir repetir el test
     for (let clave in afinidades) {
         afinidades[clave] = { total: 0, maxCount: 0, secondMaxCount: 0, highScoreCount: 0 };
     }
+
+    const form = document.getElementById('testForm');
+    const preguntas = form.querySelectorAll('.pregunta');
+    let respondidas = 0;
+
+    preguntas.forEach(pregunta => {
+        const seleccion = pregunta.querySelector('input[type="radio"]:checked');
+        if (seleccion) {
+            const puntos = JSON.parse(seleccion.getAttribute('data-puntos'));
+            sumarAfinidades(puntos);
+            respondidas++;
+        }
+    });
+
+    if (respondidas < 15) {
+        alert(`Has respondido ${respondidas} de 15 preguntas. Por favor, completa el test.`);
+        return;
+    }
+
+    const res = calcularResultadosFinal();
+    mostrarResultados(res);
+});
+
+function mostrarResultados(res) {
+    const contenedor = document.getElementById('resultado');
+    let html = `
+        <div class="resultado-final">
+            <h2>Tu Aura Principal: <span class="destaque">${res.principal}</span></h2>
+            ${res.secundaria ? `<h3>Aura Secundaria: <span class="destaque-sec">${res.secundaria}</span></h3>` : '<p>No posees un aura secundaria definida.</p>'}
+            
+            ${res.latentesDespertables.length > 0 ? `<p><strong>Auras Latentes:</strong> ${res.latentesDespertables.join(', ')}</p>` : ''}
+            
+            <h4>Ranking de Afinidades:</h4>
+            <ul>
+                ${res.ranking.map(item => `<li>${item[0]}: ${item[1].total.toFixed(1)} pts</li>`).join('')}
+            </ul>
+        </div>
+    `;
+    contenedor.innerHTML = html;
+    contenedor.scrollIntoView({ behavior: 'smooth' });
 }
