@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test de Afinidad de Aura</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Test de Afinidad de Aura</h1>
+<p>Responde a las siguientes preguntas:</p>
+
+<form id="testForm">
+<div class="pregunta">
+    <!-- --------------PREGUNTA 1 ----------------- -->
+    <h3>1. ¿Dónde preferirías vivir?</h3>
+        <label>
+            <input type="radio" name="p1" data-puntos='{"Geoventis": 1.3, "Ignivita": 1.5, "Aqualis": 1.0, "Nousomir": 0.7, "Obscurnis": 0.6, "Radiaris": 0.4, "Ampérion": 0.9, "Kenobaryx": 1.0, "Zoëris": 0.2, "Anthonum": 0.1}'>
+            En una torre de cristal flotante tras un acantilado, suspendida entre las nubes
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p1" data-puntos='{"Geoventis": 0.3, "Ignivita": 0.6, "Aqualis": 0.4, "Nousomir": 0.7, "Obscurnis": 1.3, "Radiaris": 0.3, "Ampérion": 0.1, "Kenobaryx": 1.5, "Zoëris": 0.4, "Anthonum": 0.9}'>
+            En un lujoso palacio en lo alto de montañas solitarias
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p1" data-puntos='{"Geoventis": 0.9, "Ignivita": 0.3, "Aqualis": 0.9, "Nousomir": 1.0, "Obscurnis": 1.5, "Radiaris": 0.6, "Ampérion": 0.8, "Kenobaryx": 0.5, "Zoëris": 0.2, "Anthonum": 0.4}'>
+            En una cueva oculta en un bosque nebuloso
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p1" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.1, "Aqualis": 0.4, "Nousomir": 1.5, "Obscurnis": 0.8, "Radiaris": 0.9, "Ampérion": 0.2, "Kenobaryx": 0.6, "Zoëris": 1.0, "Anthonum": 1.3}'>
+            En una antigua biblioteca silenciosa, repleta de pergaminos y libros polvorientos
+        </label><br>
+        </div><div class="pregunta">
+    <!-- --------------PREGUNTA 2 ----------------- -->
+        <h3>2. ¿Cómo afrontas los desafíos más difíciles?</h3>
+        <label>
+            <input type="radio" name="p2" data-puntos='{"Geoventis": 0.8, "Ignivita": 1.3, "Aqualis": 0.7, "Nousomir": 0.3, "Obscurnis": 0.5, "Radiaris": 0.4, "Ampérion": 0.8, "Kenobaryx": 0.3, "Zoëris": 0.6, "Anthonum": 1.0}'>
+            Improvisando sobre la marcha, confiando en tus instintos
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p2" data-puntos='{"Geoventis": 0.7, "Ignivita": 0.2, "Aqualis": 0.6, "Nousomir": 1.0, "Obscurnis": 0.8, "Radiaris": 0.9, "Ampérion": 0.1, "Kenobaryx": 1.5, "Zoëris": 0.9, "Anthonum": 0.6}'>
+            Analizando cuidadosamente cada paso antes de moverte
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p2" data-puntos='{"Geoventis": 0.9, "Ignivita": 0.4, "Aqualis": 1.3, "Nousomir": 0.8, "Obscurnis": 1.0, "Radiaris": 0.9, "Ampérion": 0.4, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 0.8}'>
+            Observando en silencio y no participando hasta que ya sea inevitable actuar
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p2" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.9, "Aqualis": 1.5, "Nousomir": 1.3, "Obscurnis": 1.0, "Radiaris": 1.5, "Ampérion": 1.5, "Kenobaryx": 0.6, "Zoëris": 0.8, "Anthonum": 0.7}'>
+            Buscando soluciones creativas, aunque te fuercen a salir de tu zona de confort
+        </label><br>
+        </div><div class="pregunta">
+    <!-- --------------PREGUNTA 3 ----------------- -->
+        <h3>3. ¿Matarías por salvar a un ser querido?</h3>
+        <label>
+            <input type="radio" name="p3" data-puntos='{"Geoventis": 1.0, "Ignivita": 1.5, "Aqualis": 0.5, "Nousomir": 0.6, "Obscurnis": 1.0, "Radiaris": 0.4, "Ampérion": 0.3, "Kenobaryx": 0.9, "Zoëris": 0.2, "Anthonum": 0.8}'>
+            Lo harías sin dudar, posees una determinación inquebrantable, probablemente ni siquiera nazcan arrepentimientos posteriores.
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p3" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.4, "Aqualis": 1.0, "Nousomir": 1.3, "Obscurnis": 0.1, "Radiaris": 1.0, "Ampérion": 1.0, "Kenobaryx": 1.0, "Zoëris": 0.8, "Anthonum": 1.3}'>
+            Solo si no existiera otra opción, lo cual se acabaría convirtiendo en un gran cargo de conciencia para ti.
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p3" data-puntos='{"Geoventis": 0.3, "Ignivita": 0.8, "Aqualis": 0.6, "Nousomir": 0.8, "Obscurnis": 1.5, "Radiaris": 0.3, "Ampérion": 0.7, "Kenobaryx": 0.1, "Zoëris": 0.2, "Anthonum": 1.0}'>
+            Sí. Prefieres eliminar la amenaza de raíz; hay personas que simplemente dejan de merecer el beneficio de la duda.
+
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p3" data-puntos='{"Geoventis": 0.3, "Ignivita": 0.4, "Aqualis": 1.3, "Nousomir": 1.0, "Obscurnis": 0.0, "Radiaris": 1.0, "Ampérion": 0.7, "Kenobaryx": 1.5, "Zoëris": 1.3, "Anthonum": 0.7}'>
+             Aunque quisieras, no serías capaz; tu propia naturaleza te impediría cruzar esa línea en el último momento, por mucha voluntad que intentes poner.
+        </label><br>
+        </div><div class="pregunta">
+    <!-- --------------PREGUNTA 4 ----------------- -->
+            <h3>4. ¿Qué te atrae más de la naturaleza?</h3>
+        <label>
+            <input type="radio" name="p4" data-puntos='{"Geoventis": 1.0, "Ignivita": 1.3, "Aqualis": 1.0, "Nousomir": 0.6, "Obscurnis": 0.5, "Radiaris": 1.0, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.3, "Anthonum": 0.6}'>
+            Su carácter primitivo y su imparable fuerza
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p4" data-puntos='{"Geoventis": 0.9, "Ignivita": 0.2, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.3, "Radiaris": 0.8, "Ampérion": 0.1, "Kenobaryx": 1.5, "Zoëris": 0.9, "Anthonum": 0.9}'>
+            Su calma y estabilidad
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p4" data-puntos='{"Geoventis": 0.6, "Ignivita": 0.3, "Aqualis": 0.5, "Nousomir": 1.0, "Obscurnis": 1.5, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 1.0, "Zoëris": 0.4, "Anthonum": 0.7}'>
+            Sus rincones oscuros y misteriosos
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p4" data-puntos='{"Geoventis": 1.5, "Ignivita": 0.9, "Aqualis": 1.3, "Nousomir": 1.0, "Obscurnis": 0.6, "Radiaris": 1.0, "Ampérion": 0.2, "Kenobaryx": 1.0, "Zoëris": 0.6, "Anthonum": 0.8}'>
+            La posibilidad de sentirte en armonía con ella
+        </label><br>
+        </div><div class="pregunta">
+            <!-- --------------PREGUNTA 5 ----------------- -->
+            <h3>5. Tu estilo de combate ideal sería…</h3>
+        <label>
+            <input type="radio" name="p5" data-puntos='{"Geoventis": 0.3, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.2, "Obscurnis": 0.7, "Radiaris": 0.4, "Ampérion": 1.5, "Kenobaryx": 0.3, "Zoëris": 0.2, "Anthonum": 1.0}'>
+             La ofensiva visceral: Te entregarías a un ataque frontal y apasionado, actuando más como acto reflejo que como decisión táctica
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p5" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.8, "Obscurnis": 1.0, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.3, "Zoëris": 1.0, "Anthonum": 0.8}'>
+            La réplica metódica: Mantendrías una postura sólida y equilibrada, priorizando el control para castigar cada error de tu oponente.
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p5" data-puntos='{"Geoventis": 0.4, "Ignivita": 0.3, "Aqualis": 0.7, "Nousomir": 1.0, "Obscurnis": 1.5, "Radiaris": 0.3, "Ampérion": 0.3, "Kenobaryx": 1.0, "Zoëris": 0.6, "Anthonum": 0.7}'>
+            La ejecución quirúrgica: Te mantendrías fuera del alcance visual, gestionando el tiempo con frialdad, asestando golpes escasos pero letales.
+        </label><br>
+        
+        <label>
+            <input type="radio" name="p5" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.4, "Aqualis": 0.9, "Nousomir": 1.3, "Obscurnis": 1.0, "Radiaris": 0.8, "Ampérion": 0.3, "Kenobaryx": 1.5, "Zoëris": 0.8, "Anthonum": 0.6}'>
+            La versatilidad estratégica: Te adaptarías con fluidez a las circunstancias, ajustando tu respuesta según lo que dicte el escenario.
+        </label><br>
+        </div><div class="pregunta">
+            
+<!-- --------------PREGUNTA 6 ----------------- -->
+<h3>6. ¿Qué facultad anhelas por encima de todas las demás para enfrentarte al mundo?</h3>
+<label><input type="radio" name="p6" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.5, "Aqualis": 0.6, "Nousomir": 0.8, "Obscurnis": 1.3, "Radiaris": 0.7, "Ampérion": 0.7, "Kenobaryx": 0.6, "Zoëris": 0.4, "Anthonum": 0.4}'>Capacidad de influir en los demás con tu determinación y voluntad</label><br>
+<label><input type="radio" name="p6" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.8, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 1.3, "Anthonum": 0.8}'>Paciencia y resistencia que soporta cualquier dificultad</label><br>
+<label><input type="radio" name="p6" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.6, "Aqualis": 0.7, "Nousomir": 1.2, "Obscurnis": 0.7, "Radiaris": 0.4, "Ampérion": 0.6, "Kenobaryx": 0.9, "Zoëris": 1.5, "Anthonum": 0.7}'>Ser discreto, siendo así capaz de evitar problemas</label><br>
+<label><input type="radio" name="p6" data-puntos='{"Geoventis": 1.5, "Ignivita": 0.4, "Aqualis": 1.1, "Nousomir": 1.5, "Obscurnis": 1.0, "Radiaris": 1.3, "Ampérion": 0.5, "Kenobaryx": 1.0, "Zoëris": 0.7, "Anthonum": 1.3}'>Inteligencia y percepción profunda de tu entorno</label><br>
+
+<!-- --------------PREGUNTA 7 ----------------- -->
+<h3>7. Si algo no sale como esperabas, tu primera reacción es...</h3>
+<label><input type="radio" name="p7" data-puntos='{"Geoventis": 1.0, "Ignivita": 1.5, "Aqualis": 0.5, "Nousomir": 0.4, "Obscurnis": 1.3, "Radiaris": 0.6, "Ampérion": 1.3, "Kenobaryx": 0.5, "Zoëris": 0.8, "Anthonum": 1.0}'>Enfrentarlo con fuerza y decisión</label><br>
+<label><input type="radio" name="p7" data-puntos='{"Geoventis": 1.1, "Ignivita": 0.4, "Aqualis": 1.5, "Nousomir": 1.0, "Obscurnis": 0.3, "Radiaris": 0.9, "Ampérion": 0.3, "Kenobaryx": 1.3, "Zoëris": 0.8, "Anthonum": 0.7}'>Mantener la calma y analizar la situación</label><br>
+<label><input type="radio" name="p7" data-puntos='{"Geoventis": 0.3, "Ignivita": 0.7, "Aqualis": 0.6, "Nousomir": 0.9, "Obscurnis": 0.5, "Radiaris": 0.4, "Ampérion": 0.6, "Kenobaryx": 0.8, "Zoëris": 1.2, "Anthonum": 0.5}'>Venirte abajo y perder la ilusión</label><br>
+<label><input type="radio" name="p7" data-puntos='{"Geoventis": 0.6, "Ignivita": 1.0, "Aqualis": 0.7, "Nousomir": 1.1, "Obscurnis": 1.5, "Radiaris": 0.8, "Ampérion": 0.5, "Kenobaryx": 1.5, "Zoëris": 0.9, "Anthonum": 0.6}'>Culpar y exigir a los demás</label><br>
+
+<!-- --------------PREGUNTA 8 ----------------- -->
+<h3>8. ¿Qué valoras más en la vida?</h3>
+<label><input type="radio" name="p8" data-puntos='{"Geoventis": 1.3, "Ignivita": 1.3, "Aqualis": 0.5, "Nousomir": 0.6, "Obscurnis": 0.7, "Radiaris": 0.8, "Ampérion": 0.7, "Kenobaryx": 0.4, "Zoëris": 0.3, "Anthonum": 1.5}'>Logros personales</label><br>
+<label><input type="radio" name="p8" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.7, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 0.8, "Anthonum": 0.4}'>Tranquilidad</label><br>
+<label><input type="radio" name="p8" data-puntos='{"Geoventis": 0.6, "Ignivita": 0.9, "Aqualis": 0.7, "Nousomir": 0.8, "Obscurnis": 1.3, "Radiaris": 0.5, "Ampérion": 0.6, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 1.0}'>Libertad</label><br>
+<label><input type="radio" name="p8" data-puntos='{"Geoventis": 0.7, "Ignivita": 0.4, "Aqualis": 1.2, "Nousomir": 1.5, "Obscurnis": 0.5, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 0.8}'>Conocimiento</label><br>
+
+<!-- --------------PREGUNTA 9 ----------------- -->
+<h3>9. Si te vieras obligado a desprenderte de una parte de ti para avanzar, ¿cuál elegirías?</h3>
+<label><input type="radio" name="p9" data-puntos='{"Geoventis": 1.3, "Ignivita": 1.5, "Aqualis": 0.4, "Nousomir": 0.5, "Obscurnis": 0.8, "Radiaris": 0.6, "Ampérion": 1.3, "Kenobaryx": 0.4, "Zoëris": 0.3, "Anthonum": 0.5}'>Renunciar a la comodidad para actuar debidamente</label><br>
+<label><input type="radio" name="p9" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.4, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.3, "Radiaris": 0.8, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 0.7, "Anthonum": 0.8}'>Renunciar a la emoción para mantener estabilidad</label><br>
+<label><input type="radio" name="p9" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.8, "Aqualis": 0.6, "Nousomir": 0.7, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 0.5, "Kenobaryx": 0.6, "Zoëris": 1.5, "Anthonum": 1.0}'>Renunciar a la seguridad para conservar libertad</label><br>
+<label><input type="radio" name="p9" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.5, "Aqualis": 1.1, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.3, "Ampérion": 0.3, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 0.3}'>Renunciar a lo efímero en favor del conocimiento</label><br>
+
+<!-- --------------PREGUNTA 10 ----------------- -->
+<h3>10. ¿Qué describe mejor tu temperamento?</h3>
+<label><input type="radio" name="p10" data-puntos='{"Geoventis": 1.5, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.5, "Obscurnis": 0.6, "Radiaris": 0.7, "Ampérion": 1.3, "Kenobaryx": 0.4, "Zoëris": 0.3, "Anthonum": 1.0}'>Apasionado, intenso</label><br>
+<label><input type="radio" name="p10" data-puntos='{"Geoventis": 1.1, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.8, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 0.8, "Anthonum": 0.9}'>Tranquilo, constante</label><br>
+<label><input type="radio" name="p10" data-puntos='{"Geoventis": 0.4, "Ignivita": 0.7, "Aqualis": 0.6, "Nousomir": 0.8, "Obscurnis": 1.5, "Radiaris": 0.4, "Ampérion": 0.5, "Kenobaryx": 0.7, "Zoëris": 1.3, "Anthonum": 0.6}'>Reservado, cauteloso</label><br>
+<label><input type="radio" name="p10" data-puntos='{"Geoventis": 0.7, "Ignivita": 0.4, "Aqualis": 1.2, "Nousomir": 1.5, "Obscurnis": 0.5, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 0.5}'>Analítico, reflexivo</label><br>
+
+<!-- --------------PREGUNTA 11 ----------------- -->
+<h3>11. ¿Qué te motiva más profundamente?</h3>
+<label><input type="radio" name="p11" data-puntos='{"Geoventis": 0.6, "Ignivita": 1.5, "Aqualis": 0.4, "Nousomir": 0.6, "Obscurnis": 0.7, "Radiaris": 0.8, "Ampérion": 0.5, "Kenobaryx": 0.5, "Zoëris": 0.3, "Anthonum": 1.0}'>Superar retos y destacar</label><br>
+<label><input type="radio" name="p11" data-puntos='{"Geoventis": 1.5, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.7, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 0.8, "Anthonum": 0.9}'>Garantizar una vida tranquila</label><br>
+<label><input type="radio" name="p11" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.8, "Aqualis": 0.7, "Nousomir": 0.9, "Obscurnis": 1.0, "Radiaris": 0.4, "Ampérion": 1.5, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 1.3}'>Romper la rutina y descubrir cosas nuevas</label><br>
+<label><input type="radio" name="p11" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.5, "Aqualis": 1.2, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 0.3}'>Encontrar respuestas y claridad</label><br>
+
+<!-- --------------PREGUNTA 12 ----------------- -->
+<h3>12. En un grupo, sueles ser...</h3>
+<label><input type="radio" name="p12" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.5, "Aqualis": 0.5, "Nousomir": 0.6, "Obscurnis": 0.9, "Radiaris": 0.8, "Ampérion": 0.5, "Kenobaryx": 0.4, "Zoëris": 0.3, "Anthonum": 1.3}'>El que lidera y toma la iniciativa</label><br>
+<label><input type="radio" name="p12" data-puntos='{"Geoventis": 1.5, "Ignivita": 0.3, "Aqualis": 1.0, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.7, "Ampérion": 0.2, "Kenobaryx": 1.3, "Zoëris": 1.5, "Anthonum": 0.4}'>El que asegura que todo vaya en orden</label><br>
+<label><input type="radio" name="p12" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 0.7, "Zoëris": 0.8, "Anthonum": 0.5}'>El que fluye con los demás y da el toque necesario cuando surge la ocasión</label><br>
+<label><input type="radio" name="p12" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.5, "Aqualis": 1.2, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 1.3}'>El que propone planes y soluciones coherentes</label><br>
+
+<!-- --------------PREGUNTA 13 ----------------- -->
+<h3>13. Ante el caos, tu respuesta más natural es...</h3>
+<label><input type="radio" name="p13" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.5, "Obscurnis": 1.0, "Radiaris": 0.6, "Ampérion": 1.5, "Kenobaryx": 0.4, "Zoëris": 0.3, "Anthonum": 1.0}'>Unirte a él</label><br>
+<label><input type="radio" name="p13" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.3, "Aqualis": 0.7, "Nousomir": 0.9, "Obscurnis": 0.5, "Radiaris": 0.8, "Ampérion": 0.2, "Kenobaryx": 1.5, "Zoëris": 0.8, "Anthonum": 0.9}'>Contenerlo todo lo posible</label><br>
+<label><input type="radio" name="p13" data-puntos='{"Geoventis": 1.5, "Ignivita": 0.8, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 0.6, "Kenobaryx": 0.2, "Zoëris": 1.5, "Anthonum": 0.6}'>Adaptarte para que no te afecte</label><br>
+<label><input type="radio" name="p13" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.5, "Aqualis": 1.2, "Nousomir": 1.5, "Obscurnis": 0.2, "Radiaris": 1.3, "Ampérion": 0.4, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 1.3}'>Lo erradicas en cuanto puedes</label><br>
+
+<!-- --------------PREGUNTA 14 ----------------- -->
+<h3>14. ¿Qué temes más?</h3>
+<label><input type="radio" name="p14" data-puntos='{"Geoventis": 0.3, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.6, "Obscurnis": 0.7, "Radiaris": 1.3, "Ampérion": 0.6, "Kenobaryx": 0.5, "Zoëris": 0.8, "Anthonum": 1.5}'>La muerte</label><br>
+<label><input type="radio" name="p14" data-puntos='{"Geoventis": 1.0, "Ignivita": 0.3, "Aqualis": 1.5, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.7, "Ampérion": 0.8, "Kenobaryx": 1.5, "Zoëris": 0.8, "Anthonum": 0.9}'>La traición</label><br>
+<label><input type="radio" name="p14" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.8, "Aqualis": 0.6, "Nousomir": 0.9, "Obscurnis": 0.2, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 0.6}'>La soledad</label><br>
+<label><input type="radio" name="p14" data-puntos='{"Geoventis": 0.8, "Ignivita": 0.5, "Aqualis": 0.7, "Nousomir": 1.0, "Obscurnis": 1.0, "Radiaris": 1.0, "Ampérion": 1.5, "Kenobaryx": 1.0, "Zoëris": 0.9, "Anthonum": 1.3}'>El fracaso</label><br>
+
+<!-- --------------PREGUNTA 15 ----------------- -->
+<h3>15. Cuando hayas muerto, ¿Cómo deseas ser recordado?</h3>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.6, "Obscurnis": 1.3, "Radiaris": 1.3, "Ampérion": 1.5, "Kenobaryx": 0.5, "Zoëris": 0.9, "Anthonum": 1.0}'>Como alguien valiente y decidido</label><br>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 1.3, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.7, "Ampérion": 0.2, "Kenobaryx": 1.5, "Zoëris": 1.3, "Anthonum": 0.9}'>Como alguien confiable y constante</label><br>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.2, "Aqualis": 1.0, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 0.6}'>Como alguien amable y considerado</label><br>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 0.8, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.0, "Ampérion": 0.1, "Kenobaryx": 1.3, "Zoëris": 0.2, "Anthonum": 0.3}'>Como alguien sabio y perspicaz</label><br>
+
+<button type="button" id="btnFinalizar">Finalizar</button>
+</form>
+
+<div id="resultado"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
