@@ -10,7 +10,7 @@ const afinidades = {
     Ámbar_Radiaris: { total: 0, color: '#FFA007', maxTeorico: 14.8 },
     Amarillo_Ampérion: { total: 0, color: '#FFEB3B', maxTeorico: 13.5 },
     Blanco_Kenobaryx: { total: 0, color: '#FFFFFF', maxTeorico: 17.2 },
-    Rosa_Zoëris: { total: 0, color: '#E91E63', maxTeorion: 15.1 },
+    Rosa_Zoëris: { total: 0, color: '#E91E63', maxTeorico: 15.1 },
     Gris_Marron_Anthonum: { total: 0, color: '#795548', maxTeorico: 15.3 }
 };
 
