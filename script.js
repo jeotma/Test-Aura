@@ -35,7 +35,7 @@ const pesosHTML = {
 };
 
 // Factor de escala para el ranking visual (Ajusta este número si los % salen muy bajos)
-const MULTIPLICADOR_RESULTADO = 65; 
+const MULTIPLICADOR_RESULTADO = 148; 
 
 function normalizarNombre(id) {
     return id.replace(/_/g, ' ');
@@ -119,16 +119,16 @@ function calcularResultadosFinal() {
     let secundaria = null;
     const diferencia = principal.porcentaje - segundaCandidata.porcentaje;
     
-    // Si la diferencia es menor al 8%, se considera aura dual
-    if (diferencia <= 3) {
+    // Si la diferencia es menor al 6%, se considera aura dual
+    if (diferencia <= 6) {
         secundaria = segundaCandidata;
     }
 
-    // Latentes: Superan el 67.1% y no son principal/secundaria
+    // Latentes: Superan el 65% y no son principal/secundaria
     const latentes = ordenadas.filter(a => 
         a.nombre !== principal.nombre && 
         (!secundaria || a.nombre !== secundaria.nombre) && 
-        a.porcentaje > 67.1
+        a.porcentaje > 65
     );
 
     return { principal, secundaria, ranking: ordenadas, latentes };

@@ -1,0 +1,95 @@
+/**
+ * SIMULADOR DE TEST DE AURA CON PROMEDIO DE PUNTOS
+ */
+function simularTest(iteraciones = 3000) {
+    const estadisticas = {};
+    
+    const nombresAuras = [
+        "Verde_Geoventis", "Rojo_Ignivita", "Azul_Aqualis", 
+        "Violeta_Nousomir", "Negro_Obscurnis", "Ámbar_Radiaris", 
+        "Amarillo_Ampérion", "Blanco_Kenobaryx", "Rosa_Zoëris", "Gris_Marrón_Anthonum"
+    ];
+
+    // Inicializamos estadísticas
+    nombresAuras.forEach(aura => {
+        estadisticas[aura] = { 
+            primaria: 0, 
+            secundaria: 0, 
+            ultima: 0, 
+            puntosAcumulados: 0, // Para calcular el promedio
+            promedioPuntos: 0 
+        };
+    });
+
+    console.log(`%c Iniciando simulación de ${iteraciones} ejecuciones...`, 'color: #00E5FF; font-weight: bold;');
+
+    for (let i = 0; i < iteraciones; i++) {
+        // 1. Resetear afinidades para esta vuelta
+        const afinidadesSim = {
+            Verde_Geoventis: { total: 0, maxTeorico: 16.5 },
+            Rojo_Ignivita: { total: 0, maxTeorico: 15.2 },
+            Azul_Aqualis: { total: 0, maxTeorico: 17.5 },
+            Violeta_Nousomir: { total: 0, maxTeorico: 16.8 },
+            Negro_Obscurnis: { total: 0, maxTeorico: 16.2 }, 
+            Ámbar_Radiaris: { total: 0, maxTeorico: 14.8 },
+            Amarillo_Ampérion: { total: 0, maxTeorico: 13.5 },
+            Blanco_Kenobaryx: { total: 0, maxTeorico: 17.2 },
+            Rosa_Zoëris: { total: 0, maxTeorico: 15.1 },
+            Gris_Marrón_Anthonum: { total: 0, maxTeorico: 15.8 }
+ };
+
+        // 2. Simular selección aleatoria de las 15 preguntas
+        for (let p = 1; p <= 15; p++) {
+            const opciones = document.querySelectorAll(`input[name="p${p}"]`);
+            if (opciones.length === 0) continue;
+
+            const aleatorio = Math.floor(Math.random() * opciones.length);
+            const puntos = JSON.parse(opciones[aleatorio].getAttribute('data-puntos'));
+
+            for (let claveCorta in puntos) {
+                const valorPuntos = puntos[claveCorta];
+                const claveCortaNorm = claveCorta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                for (let claveCompleta in afinidadesSim) {
+                    const claveCompNorm = claveCompleta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    if (claveCompNorm.includes(claveCortaNorm)) {
+                        const factorRescale = 20 / afinidadesSim[claveCompleta].maxTeorico;
+                        afinidadesSim[claveCompleta].total += (valorPuntos * factorRescale);
+                    }
+                }
+            }
+        }
+
+        // 3. Registrar puntos y calcular posiciones
+        const ordenadas = Object.entries(afinidadesSim).sort((a, b) => b[1].total - a[1].total);
+        
+        ordenadas.forEach(([nombre, data]) => {
+            estadisticas[nombre].puntosAcumulados += data.total;
+});
+
+        const principal = ordenadas[0];
+        const segunda = ordenadas[1];
+        const ultima = ordenadas[ordenadas.length - 1];
+
+        estadisticas[principal[0]].primaria++;
+        
+        // Lógica de margen para secundaria
+        if ((principal[1].total - segunda[1].total) <= 1.5) {
+            estadisticas[segunda[0]].secundaria++;
+        }
+        
+        estadisticas[ultima[0]].ultima++;
+    }
+
+    // 4. Calcular promedios finales y limpiar datos temporales
+    nombresAuras.forEach(aura => {
+        estadisticas[aura].promedioPuntos = (estadisticas[aura].puntosAcumulados / iteraciones).toFixed(2);
+        delete estadisticas[aura].puntosAcumulados; // Limpiamos para que la tabla sea legible
+    });
+
+    console.table(estadisticas);
+    return "Simulación completa con promedios de puntos.";
+}
+
+// Ejecutar
+simularTest(3000);
