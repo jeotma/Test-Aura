@@ -11,7 +11,7 @@ const afinidades = {
     Amarillo_Ampérion: { total: 0, color: '#FFEB3B', maxTeorico: 13.5 },
     Blanco_Kenobaryx: { total: 0, color: '#FFFFFF', maxTeorico: 17.2 },
     Rosa_Zoëris: { total: 0, color: '#E91E63', maxTeorico: 15.1 },
-    Gris_Marron_Anthonum: { total: 0, color: '#795548', maxTeorico: 15.3 }
+    Gris_Marrón_Anthonum: { total: 0, color: '#795548', maxTeorico: 15.3 }
 };
 
 const TECHO_ESCALA = 25; 
@@ -50,9 +50,17 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
 function sumarAfinidades(puntosEntrada) {
     for (let claveCorta in puntosEntrada) {
         const valorPuntos = puntosEntrada[claveCorta];
-        // Buscamos la coincidencia en el objeto afinidades (ej: "Geoventis" en "Verde_Geoventis")
+        
+        // Normalizamos la clave corta
+        const claveCortaNormalizada = claveCorta.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
         for (let claveCompleta in afinidades) {
-            if (claveCompleta.includes(claveCorta)) {
+            // Normalizamos la clave completa del objeto
+            const claveCompletaNormalizada = claveCompleta.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (claveCompletaNormalizada.includes(claveCortaNormalizada)) {
                 const factorRescale = 20 / afinidades[claveCompleta].maxTeorico;
                 afinidades[claveCompleta].total += (valorPuntos * factorRescale);
             }
