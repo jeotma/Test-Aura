@@ -14,26 +14,19 @@ const afinidades = {
     Gris_Marrón_Anthonum: { total: 0, color: '#795548' }
 };
 
-// Estos son los totales de puntos sumados directamente de tu HTML
-// Sirven para equilibrar el peso de cada aura automáticamente.
 const pesosHTML = {
-    // Bajamos el divisor de las que pierden siempre
     Rojo_Ignivita: 27.0, 
     Rosa_Zoëris: 28.0, 
     Amarillo_Ampérion: 24.0,
     Verde_Geoventis: 27.3,
-    
-    // El resto se mantienen en un rango medio
     Violeta_Nousomir: 46.9,
     Ámbar_Radiaris: 41.1,
     Gris_Marrón_Anthonum: 40.6,
     Negro_Obscurnis: 31.6,
     Blanco_Kenobaryx: 41.0, 
     Azul_Aqualis: 43.0,
-
 };
 
-// Factor de escala para el ranking visual (Ajusta este número si los % salen muy bajos)
 const MULTIPLICADOR_RESULTADO = 148; 
 
 function normalizarNombre(id) {
@@ -41,7 +34,7 @@ function normalizarNombre(id) {
 }
 
 /* ==========================================
-   GESTIÓN DE PROGRESO, SONIDOS Y ESTADOS
+   GESTIÓN DE PROGRESO Y SONIDOS
 ========================================== */
 document.querySelectorAll('input[type="radio"]').forEach(radio => {
     radio.addEventListener('change', () => {
@@ -62,7 +55,7 @@ document.querySelectorAll('input[type="radio"]').forEach(radio => {
 });
 
 /* ================================
-   SUMA DE PUNTOS
+   LÓGICA DE SUMA
 ================================ */
 function sumarAfinidades(puntosEntrada) {
     for (let claveCorta in puntosEntrada) {
@@ -71,7 +64,6 @@ function sumarAfinidades(puntosEntrada) {
 
         for (let claveCompleta in afinidades) {
             const claveCompletaNorm = claveCompleta.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
             if (claveCompletaNorm.includes(claveCortaNorm)) {
                 afinidades[claveCompleta].total += valorPuntos;
             }
@@ -80,25 +72,19 @@ function sumarAfinidades(puntosEntrada) {
 }
 
 /* ================================
-   CÁLCULO DE RESULTADOS (OPTIMIZADO)
+   CÁLCULO DE RESULTADOS
 =============================== */
 function calcularResultadosFinal() {
     const afinidadesCalculadas = Object.keys(afinidades).map(key => {
         let puntosObtenidos = afinidades[key].total;
         const pesoDivisor = pesosHTML[key];
         
-        // --- NUEVA LÓGICA DE IGUALACIÓN POR LO BAJO ---
-        // Si el aura tiene pocos puntos (especialistas), le damos un empujón 
-        // para que su derrota no sea tan abismal
-        // Si tiene más de 5 puntos, el bono desaparece para no dopar al ganador.
         let bonoResiliencia = 0;
         if (puntosObtenidos < 8.0) {
             bonoResiliencia = (5.0 - puntosObtenidos) * 0.4; 
         }
 
-        // Aplicamos la fórmula con el bono dinámico
         let porcentajeFinal = ((puntosObtenidos + bonoResiliencia) / pesoDivisor) * MULTIPLICADOR_RESULTADO;
-        
         if (porcentajeFinal > 100) porcentajeFinal = 100;
 
         return {
@@ -109,7 +95,6 @@ function calcularResultadosFinal() {
         };
     });
 
-    // Ordenamos por el porcentaje calculado
     const ordenadas = afinidadesCalculadas.sort((a, b) => b.porcentaje - a.porcentaje);
     
     const principal = ordenadas[0];
@@ -118,7 +103,6 @@ function calcularResultadosFinal() {
     let secundaria = null;
     const diferencia = principal.porcentaje - segundaCandidata.porcentaje;
     
-    // Si la diferencia es menor al 6%, se considera aura dual
     if (diferencia <= 6) {
         secundaria = segundaCandidata;
     }
@@ -134,22 +118,96 @@ function calcularResultadosFinal() {
 }
 
 /* ================================
+   FINALIZAR Y GUARDAR HISTORIAL
+================================ */
+document.getElementById('btnFinalizar').addEventListener('click', () => {
+    // Resetear puntos antes de volver a contar
+    for (let key in afinidades) { afinidades[key].total = 0; }
+
+    const preguntas = document.querySelectorAll('.pregunta');
+    let respondidas = 0;
+    const respuestasDetalladas = {};
+
+    preguntas.forEach((pregunta, index) => {
+        const seleccion = pregunta.querySelector('input[type="radio"]:checked');
+        if (seleccion) {
+            try {
+                const puntos = JSON.parse(seleccion.getAttribute('data-puntos'));
+                sumarAfinidades(puntos);
+                
+                // Guardar la respuesta literal del usuario
+                respuestasDetalladas[`pregunta_${index + 1}`] = seleccion.parentElement.innerText.trim();
+                
+                respondidas++;
+            } catch (e) { console.error("Error en data-puntos:", e); }
+        }
+    });
+
+    if (respondidas < 15) {
+        alert("Responde las 15 preguntas.");
+        return;
+    }
+
+    const resultados = calcularResultadosFinal();
+    
+    // --- LÓGICA DE HISTORIAL COMPLEJO ---
+    const inputNombre = document.getElementById('nombreUsuario');
+    const nombreParaHistorial = inputNombre ? inputNombre.value.trim() : "Anónimo";
+
+    if (nombreParaHistorial.toLowerCase() !== "test") {
+        
+        // Si hay secundaria, las latentes están BLOQUEADAS
+        // Si NO hay secundaria, las latentes son DESPERTABLES
+        const haySecundaria = resultados.secundaria !== null;
+        const nombresLatentes = resultados.latentes.map(l => l.nombre);
+
+        const datosHistorial = {
+            usuario: nombreParaHistorial,
+            aura_principal: resultados.principal.nombre,
+            aura_secundaria: haySecundaria ? resultados.secundaria.nombre : "Ninguna",
+            latentes_despertables: !haySecundaria ? nombresLatentes : [],
+            latentes_bloqueadas: haySecundaria ? nombresLatentes : [],
+            respuestas_completas: respuestasDetalladas,
+            es_dual: haySecundaria
+        };
+
+        if (typeof window.guardarResultado === 'function') {
+            window.guardarResultado(datosHistorial);
+        }
+    }
+
+    mostrarResultados(resultados);
+});
+
+/* ================================
    INTERFAZ VISUAL
+================================ */
+/* ================================
+   INTERFAZ VISUAL AJUSTADA
 ================================ */
 function mostrarResultados(res) {
     const contenedor = document.getElementById('resultado');
     const finalSound = document.getElementById('snd-final');
     if (finalSound) finalSound.play().catch(() => {});
 
+    // Configuración de visualización única o dual
     if (!res.secundaria) {
         contenedor.classList.add('resultado-unico');
     } else {
         contenedor.classList.remove('resultado-unico');
     }
 
+    // --- LÓGICA DE MATIZ VISUAL ---
+    // Si hay secundaria: Matiz apagado (Bloqueadas)
+    // Si no hay secundaria: Color habitual (Despertables/Emergentes)
     const estiloLatente = res.secundaria 
-    ? 'filter: saturate(0.6) brightness(0.9); opacity: 0.8;' 
-    : 'text-shadow: 0 0 5px rgba(255,255,255,0.2);';
+        ? 'filter: saturate(0.2) brightness(0.6); opacity: 0.6;' 
+        : 'filter: saturate(1) brightness(1.1); text-shadow: 0 0 8px rgba(255,255,255,0.2);';
+
+    // Determinar etiqueta para las latentes (Tu texto manual)
+    const etiquetaEstado = res.secundaria 
+        ? "AURAS LATENTES DETECTADAS. Sin embargo, el cuerpo humano solo es capaz de soportar 2 auras. Esencias bloqueadas:" 
+        : "AURAS LATENTES DETECTADAS. Esencias emergentes:";
 
     let html = `
         <div style="text-align: center; margin-bottom: 40px; border: 2px solid ${res.principal.color}; padding: 25px; border-radius: 20px; background: rgba(0,0,0,0.3); box-shadow: 0 0 25px ${res.principal.color}44;">
@@ -160,19 +218,19 @@ function mostrarResultados(res) {
             
             ${res.secundaria ? `
                 <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <p style="letter-spacing: 3px; font-size: 0.7rem; opacity: 0.7; margin-bottom: 8px;">AURA SECUNDARIA</p>
+                    <p style="letter-spacing: 3px; font-size: 0.7rem; opacity: 0.7; margin-bottom: 8px;">AURA SECUNDARIA DESPERTADA</p>
                     <h3 style="color: ${res.secundaria.color}; font-size: 1.8rem; margin: 0; text-shadow: 0 0 10px ${res.secundaria.color}55;">
                         ${normalizarNombre(res.secundaria.nombre)}
                     </h3>
                 </div>
-            ` : '<p style="margin-top: 25px; font-style: italic; color: #00E5FF; opacity: 0.9;">Aura de sintonía única.</p>'}
+            ` : '<p style="margin-top: 25px; font-style: italic; color: #00E5FF; opacity: 0.9;">Aura de sintonía única detectada.</p>'}
 
             ${res.latentes.length > 0 ? `
                 <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dotted rgba(255,255,255,0.1);">
-                    <p style="font-size: 0.75rem; color: #6dff44; letter-spacing: 1px; margin-bottom: 5px;">AURAS LATENTES DETECTADAS</p>
+                    <p style="font-size: 0.65rem; color: ${res.secundaria ? '#ff4444' : '#6dff44'}; letter-spacing: 1px; margin-bottom: 8px;">${etiquetaEstado}</p>
                     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                         ${res.latentes.map(a => `
-                            <span style="color: ${a.color}; font-weight: bold; font-size: 0.95rem; ${estiloLatente}">
+                            <span style="color: ${a.color}; font-weight: bold; font-size: 0.95rem; ${estiloLatente} transition: all 0.5s ease;">
                                 ${normalizarNombre(a.nombre)}
                             </span>
                         `).join(' <span style="color:rgba(255,255,255,0.1)">|</span> ')}
@@ -185,6 +243,7 @@ function mostrarResultados(res) {
             <h4 style="margin-bottom: 25px; text-align: center; color: #00E5FF; font-size: 0.9rem; letter-spacing: 2px;">ESPECTRO DE AFINIDAD COMPLETO</h4>
     `;
 
+    // Generación del ranking de barras
     res.ranking.forEach(item => {
         const porcentaje = item.porcentaje.toFixed(1);
         const esPerfecto = item.porcentaje >= 99.9;
@@ -207,7 +266,7 @@ function mostrarResultados(res) {
 
     html += `
         <div style="text-align: center; margin-top: 40px;">
-            <button type="button" id="btnReiniciar" style="background: transparent; border: 2px solid #F45B69; color: #F45B69; padding: 10px 25px; box-shadow: none; font-size: 0.8rem; cursor: pointer;">
+            <button type="button" id="btnReiniciar" style="background: transparent; border: 2px solid #F45B69; color: #F45B69; padding: 10px 25px; box-shadow: none; font-size: 0.8rem; cursor: pointer; transition: all 0.3s;">
                 REINICIAR TEST
             </button>
         </div>
@@ -220,51 +279,3 @@ function mostrarResultados(res) {
         window.location.reload();
     });
 }
-
-/* ================================
-   MANEJADOR DE EVENTO PRINCIPAL
-================================ */
-document.getElementById('btnFinalizar').addEventListener('click', () => {
-    // Resetear puntuaciones antes de recalcular
-    Object.keys(afinidades).forEach(key => afinidades[key].total = 0);
-
-    const preguntas = document.querySelectorAll('.pregunta');
-    let respondidas = 0;
-
-    preguntas.forEach(pregunta => {
-        const seleccion = pregunta.querySelector('input[type="radio"]:checked');
-        if (seleccion) {
-            try {
-                const puntos = JSON.parse(seleccion.getAttribute('data-puntos'));
-                sumarAfinidades(puntos);
-                respondidas++;
-            } catch (e) { console.error("Error en data-puntos:", e); }
-        }
-    });
-
-    if (respondidas < 15) {
-        alert("El test está incompleto. Responde las 15 preguntas para sintonizar tu aura.");
-        return;
-    }
-
-    const resultados = calcularResultadosFinal();
-    
-    // --- LÓGICA DE FILTRADO PARA FIREBASE ---
-    const inputNombre = document.getElementById('nombreUsuario');
-    const nombreParaHistorial = inputNombre ? inputNombre.value.trim() : "Anónimo";
-    
-    // Condicional: Si el nombre NO es "Test" (ignora mayúsculas/minúsculas), se guarda
-    if (nombreParaHistorial.toLowerCase() !== "test") {
-        if (typeof window.guardarResultado === 'function') {
-            window.guardarResultado(
-                nombreParaHistorial, 
-                resultados.principal.nombre, 
-                resultados.principal.porcentaje.toFixed(1)
-            );
-        }
-    } else {
-        console.log("Modo de prueba detectado: No se enviarán datos a la base de datos.");
-    }
-
-    mostrarResultados(resultados);
-});

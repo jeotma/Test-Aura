@@ -221,41 +221,36 @@
 <audio id="snd-final" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
 <script type="module">
-  // 1. Importamos Firestore y las herramientas de base de datos
+  // 1. Importamos la configuración desde el archivo externo (que debes añadir al .gitignore)
+  import firebaseConfig from './config.js';
+
+  // 2. Importamos las herramientas de Firebase desde la CDN
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-  // 2. Tu configuración actual
-  const firebaseConfig = {
-    apiKey: "AIzaSyD2Ey50F-PDElizIIqgGSEUgQcFynnQfYE",
-    authDomain: "test-aura-historial.firebaseapp.com",
-    projectId: "test-aura-historial",
-    storageBucket: "test-aura-historial.firebasestorage.app",
-    messagingSenderId: "607939635758",
-    appId: "1:607939635758:web:b62164c51a335292e34dbf",
-    measurementId: "G-WNEGJX57K0"
-  };
 
   // 3. Inicializamos la App y la Base de Datos
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 4. Función para guardar (ahora con FECHA Y HORA)
-  async function guardarResultado(nombre, aura, porcentaje) {
+  /**
+   * Función para guardar el historial detallado.
+   * Recibe un objeto 'datos' construido en script.js que contiene:
+   * usuario, principal, secundaria, despertables, bloqueadas y respuestas_completas.
+   */
+  async function guardarResultado(datos) {
     try {
-      const docRef = await addDoc(collection(db, "historial_test"), {
-        nombre: nombre,
-        aura: aura,
-        porcentaje: porcentaje,
-        fecha: serverTimestamp() // <--- Esto graba la fecha y hora del servidor
+      // Creamos un nuevo documento en la colección "historial_completo"
+      const docRef = await addDoc(collection(db, "historial_completo"), {
+        ...datos,               // "Esparcimos" todas las propiedades del objeto recibido
+        fecha_servidor: serverTimestamp() // Añadimos la marca de tiempo oficial de Firebase
       });
-      console.log("¡Resultado guardado! ID:", docRef.id);
+      console.log("Sincronización con el plano espiritual exitosa. ID:", docRef.id);
     } catch (e) {
-      console.error("Error al guardar en Firebase:", e);
+      console.error("Error al intentar guardar en el registro ancestral:", e);
     }
   }
 
-  // 5. La hacemos global para que script.js pueda usarla
+  // 4. Hacemos la función accesible para script.js
   window.guardarResultado = guardarResultado;
 </script>
 
