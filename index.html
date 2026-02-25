@@ -200,11 +200,11 @@
   </div>
 <!-- --------------PREGUNTA 15 ----------------- -->
   <div class="pregunta">
-<h3>15. Cuando hayas muerto, ¿cómo deseas ser recordado?</h3>
-<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.6, "Obscurnis": 1.3, "Radiaris": 1.3, "Ampérion": 1.5, "Kenobaryx": 0.5, "Zoëris": 0.4, "Anthonum": 1.0}'>Como alguien valiente y decidido</label><br>
+<h3>15. Cuando hayas muerto, ¿cómo deseas que te recuerden?</h3>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 1.3, "Aqualis": 0.4, "Nousomir": 0.6, "Obscurnis": 1.3, "Radiaris": 1.3, "Ampérion": 1.5, "Kenobaryx": 0.5, "Zoëris": 0.4, "Anthonum": 1.0}'>Como alguien valiente y que actúa con decisión</label><br>
 <label><input type="radio" name="p15" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 1.3, "Nousomir": 0.9, "Obscurnis": 0.4, "Radiaris": 0.7, "Ampérion": 0.2, "Kenobaryx": 1.5, "Zoëris": 1.2, "Anthonum": 0.9}'>Como alguien confiable y constante</label><br>
-<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.2, "Aqualis": 1.0, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 0.6}'>Como alguien amable y considerado</label><br>
-<label><input type="radio" name="p15" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 0.8, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.0, "Ampérion": 0.1, "Kenobaryx": 1.3, "Zoëris": 0.2, "Anthonum": 0.3}'>Como alguien sabio y perspicaz</label><br>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 0.5, "Ignivita": 0.2, "Aqualis": 1.0, "Nousomir": 0.9, "Obscurnis": 1.3, "Radiaris": 0.4, "Ampérion": 1.3, "Kenobaryx": 0.7, "Zoëris": 1.5, "Anthonum": 0.6}'>Como alguien amable y con consideración</label><br>
+<label><input type="radio" name="p15" data-puntos='{"Geoventis": 1.3, "Ignivita": 0.3, "Aqualis": 0.8, "Nousomir": 1.5, "Obscurnis": 0.6, "Radiaris": 1.0, "Ampérion": 0.1, "Kenobaryx": 1.3, "Zoëris": 0.2, "Anthonum": 0.3}'>Como alguien de gran sabiduría y perspicacia</label><br>
  </div>
  <div style="text-align: center; margin: 20px 0;">
     <input type="text" id="nombreUsuario" placeholder="Introduce tu nombre" 
@@ -239,14 +239,14 @@
    */
   async function guardarResultado(datos) {
     try {
-      // Creamos un nuevo documento en la colección "historial_completo"
-      const docRef = await addDoc(collection(db, "historial_completo"), {
+      // Creamos un nuevo documento en la colección "historial_auras"
+      const docRef = await addDoc(collection(db, "historial_auras"), {
         ...datos,               // "Esparcimos" todas las propiedades del objeto recibido
         fecha_servidor: serverTimestamp() // Añadimos la marca de tiempo oficial de Firebase
       });
-      console.log("Sincronización con el plano espiritual exitosa. ID:", docRef.id);
+      console.log("Sincronización exitosa. ID:", docRef.id);
     } catch (e) {
-      console.error("Error al intentar guardar en el registro ancestral:", e);
+      console.error("Error al intentar guardar en el registro:", e);
     }
   }
 
