@@ -17,13 +17,9 @@ const afinidades = {
 // Estos son los totales de puntos sumados directamente de tu HTML
 // Sirven para equilibrar el peso de cada aura automáticamente.
 const pesosHTML = {
-    // Subimos el divisor de las que nunca pierden
-    Blanco_Kenobaryx: 74.0, 
-    Azul_Aqualis: 50.0,
-
     // Bajamos el divisor de las que pierden siempre
     Rojo_Ignivita: 27.0, 
-    Rosa_Zoëris: 24.0, 
+    Rosa_Zoëris: 28.0, 
     Amarillo_Ampérion: 24.0,
     Verde_Geoventis: 27.3,
     
@@ -32,6 +28,9 @@ const pesosHTML = {
     Ámbar_Radiaris: 41.1,
     Gris_Marrón_Anthonum: 40.6,
     Negro_Obscurnis: 31.6,
+    Blanco_Kenobaryx: 41.0, 
+    Azul_Aqualis: 43.0,
+
 };
 
 // Factor de escala para el ranking visual (Ajusta este número si los % salen muy bajos)
@@ -249,5 +248,23 @@ document.getElementById('btnFinalizar').addEventListener('click', () => {
     }
 
     const resultados = calcularResultadosFinal();
+    
+    // --- LÓGICA DE FILTRADO PARA FIREBASE ---
+    const inputNombre = document.getElementById('nombreUsuario');
+    const nombreParaHistorial = inputNombre ? inputNombre.value.trim() : "Anónimo";
+    
+    // Condicional: Si el nombre NO es "Test" (ignora mayúsculas/minúsculas), se guarda
+    if (nombreParaHistorial.toLowerCase() !== "test") {
+        if (typeof window.guardarResultado === 'function') {
+            window.guardarResultado(
+                nombreParaHistorial, 
+                resultados.principal.nombre, 
+                resultados.principal.porcentaje.toFixed(1)
+            );
+        }
+    } else {
+        console.log("Modo de prueba detectado: No se enviarán datos a la base de datos.");
+    }
+
     mostrarResultados(resultados);
 });

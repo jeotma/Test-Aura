@@ -1,22 +1,28 @@
 /**
- * SIMULADOR DE TEST DE AURA CON PROMEDIO DE PUNTOS
+ * SIMULADOR DE TEST DE AURA CON FILTRO DE SEGURIDAD PARA FIREBASE
  */
 function simularTest(iteraciones = 3000) {
     const estadisticas = {};
     
+    // Forzamos el input de nombre a "test" para activar el bloqueo de seguridad en script.js
+    const inputNombre = document.getElementById('nombreUsuario');
+    if (inputNombre) {
+        inputNombre.value = "test";
+        console.log("%c Seguridad: Input de nombre establecido en 'test' para evitar envíos a Firebase.", "color: #FFA000;");
+    }
+
     const nombresAuras = [
         "Verde_Geoventis", "Rojo_Ignivita", "Azul_Aqualis", 
         "Violeta_Nousomir", "Negro_Obscurnis", "Ámbar_Radiaris", 
         "Amarillo_Ampérion", "Blanco_Kenobaryx", "Rosa_Zoëris", "Gris_Marrón_Anthonum"
     ];
 
-    // Inicializamos estadísticas
     nombresAuras.forEach(aura => {
         estadisticas[aura] = { 
             primaria: 0, 
             secundaria: 0, 
             ultima: 0, 
-            puntosAcumulados: 0, // Para calcular el promedio
+            puntosAcumulados: 0, 
             promedioPuntos: 0 
         };
     });
@@ -24,7 +30,6 @@ function simularTest(iteraciones = 3000) {
     console.log(`%c Iniciando simulación de ${iteraciones} ejecuciones...`, 'color: #00E5FF; font-weight: bold;');
 
     for (let i = 0; i < iteraciones; i++) {
-        // 1. Resetear afinidades para esta vuelta
         const afinidadesSim = {
             Verde_Geoventis: { total: 0, maxTeorico: 16.5 },
             Rojo_Ignivita: { total: 0, maxTeorico: 15.2 },
@@ -36,9 +41,8 @@ function simularTest(iteraciones = 3000) {
             Blanco_Kenobaryx: { total: 0, maxTeorico: 17.2 },
             Rosa_Zoëris: { total: 0, maxTeorico: 15.1 },
             Gris_Marrón_Anthonum: { total: 0, maxTeorico: 15.8 }
- };
+        };
 
-        // 2. Simular selección aleatoria de las 15 preguntas
         for (let p = 1; p <= 15; p++) {
             const opciones = document.querySelectorAll(`input[name="p${p}"]`);
             if (opciones.length === 0) continue;
@@ -60,12 +64,11 @@ function simularTest(iteraciones = 3000) {
             }
         }
 
-        // 3. Registrar puntos y calcular posiciones
         const ordenadas = Object.entries(afinidadesSim).sort((a, b) => b[1].total - a[1].total);
         
         ordenadas.forEach(([nombre, data]) => {
             estadisticas[nombre].puntosAcumulados += data.total;
-});
+        });
 
         const principal = ordenadas[0];
         const segunda = ordenadas[1];
@@ -73,7 +76,6 @@ function simularTest(iteraciones = 3000) {
 
         estadisticas[principal[0]].primaria++;
         
-        // Lógica de margen para secundaria
         if ((principal[1].total - segunda[1].total) <= 1.5) {
             estadisticas[segunda[0]].secundaria++;
         }
@@ -81,15 +83,14 @@ function simularTest(iteraciones = 3000) {
         estadisticas[ultima[0]].ultima++;
     }
 
-    // 4. Calcular promedios finales y limpiar datos temporales
     nombresAuras.forEach(aura => {
         estadisticas[aura].promedioPuntos = (estadisticas[aura].puntosAcumulados / iteraciones).toFixed(2);
-        delete estadisticas[aura].puntosAcumulados; // Limpiamos para que la tabla sea legible
+        delete estadisticas[aura].puntosAcumulados; 
     });
 
     console.table(estadisticas);
-    return "Simulación completa con promedios de puntos.";
+    return "Simulación finalizada. Los datos no se han enviado a Firebase por usar el nombre 'test'.";
 }
 
-// Ejecutar
+// Ejecución
 simularTest(3000);

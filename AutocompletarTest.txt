@@ -1,6 +1,10 @@
 RELLENA EL TEST COMPLETO ALEATORIAMENTE
 
 (function() {
+    // Seguridad para Firebase
+    const inputNombre = document.getElementById('nombreUsuario');
+    if (inputNombre) inputNombre.value = "test";
+
     const preguntas = document.querySelectorAll('.pregunta');
     preguntas.forEach(div => {
         const radios = div.querySelectorAll('input[type="radio"]');
@@ -9,54 +13,75 @@ RELLENA EL TEST COMPLETO ALEATORIAMENTE
             radios[azar].checked = true;
         }
     });
+    
     document.getElementById('btnFinalizar').click();
-    console.log("¡Test completado aleatoriamente!");
+    console.log("%c ¡Test completado aleatoriamente! (Bloqueo 'test' activo)", "color: #4CAF50;");
 })();
 
 RELLENA EL TEST, CONSIGUIENDO EL 100% DE UN AURA
 
 (function(auraDeseada) {
+    // Seguridad para Firebase
+    const inputNombre = document.getElementById('nombreUsuario');
+    if (inputNombre) inputNombre.value = "test";
+
     // 1. Reseteamos todos los totales a cero
     Object.keys(afinidades).forEach(key => afinidades[key].total = 0);
 
-    // 2. Inyectamos el valor exacto del TECHO_ESCALA al aura elegida
-    // Esto garantiza el 100% matemático
+    // 2. Inyectamos valor (Usamos un valor alto para asegurar el 100%)
+    const valorTecho = 50; 
+    let claveFinal = "";
+
     if (afinidades[auraDeseada]) {
-        afinidades[auraDeseada].total = TECHO_ESCALA;
+        claveFinal = auraDeseada;
     } else {
-        // Por si escribes mal el nombre (ej: "Verde_Geoventis")
-        const clave = Object.keys(afinidades).find(k => k.includes(auraDeseada));
-        if (clave) afinidades[clave].total = TECHO_ESCALA;
+        claveFinal = Object.keys(afinidades).find(k => k.toLowerCase().includes(auraDeseada.toLowerCase()));
     }
 
-    // 3. (Opcional) Añadimos una latente al 70% para probar el mensaje de "Despertable"
-    const otraAura = Object.keys(afinidades).find(k => !k.includes(auraDeseada));
-    afinidades[otraAura].total = TECHO_ESCALA * 0.7;
+    if (claveFinal) {
+        afinidades[claveFinal].total = valorTecho;
+        
+        // 3. Añadimos una latente para pruebas visuales
+        const otraAura = Object.keys(afinidades).find(k => k !== claveFinal);
+        afinidades[otraAura].total = valorTecho * 0.7;
 
-    // 4. Llamamos directamente a la función de renderizado
-    const resultados = calcularResultadosFinal();
-    mostrarResultados(resultados);
+        // 4. Procesar y mostrar
+        const resultados = calcularResultadosFinal();
+        
+        // El condicional en script.js bloqueará el envío por ser "test"
+        if (typeof window.guardarResultado === 'function') {
+            window.guardarResultado("test", resultados.principal.nombre, resultados.principal.porcentaje.toFixed(1));
+        }
 
-    console.log(`%c [DEBUG] Modo Sintonía Pura activado para: ${auraDeseada}`, "color: #FFEB3B; background: #000; padding: 5px;");
-})("Geoventis"); // <-- Cambia aquí el nombre
+        mostrarResultados(resultados);
+        console.log(`%c [DEBUG] Modo 100% activo para: ${claveFinal}. Envío a Firebase bloqueado.`, "color: #FFEB3B; background: #000;");
+    } else {
+        console.error("No se encontró el aura: " + auraDeseada);
+    }
+})("Geoventis");
 
 
 PROBAR LATENTES
 
 (function(aura1, aura2) {
+    // Seguridad para Firebase
+    const inputNombre = document.getElementById('nombreUsuario');
+    if (inputNombre) inputNombre.value = "test";
+
     const preguntas = document.querySelectorAll('.pregunta');
     preguntas.forEach(pregunta => {
         const opciones = Array.from(pregunta.querySelectorAll('input[type="radio"]'));
         
-        // Elige opciones que den puntos a aura1 o aura2
         const opcionDual = opciones.find(opt => {
             const pts = JSON.parse(opt.getAttribute('data-puntos'));
-            return pts[aura1] > 0 || pts[aura2] > 0;
+            // Normalizamos para comparar
+            const keys = Object.keys(pts).map(k => k.toLowerCase());
+            return keys.some(k => k.includes(aura1.toLowerCase()) || k.includes(aura2.toLowerCase()));
         }) || opciones[0];
 
         opcionDual.checked = true;
     });
     
     document.getElementById('btnFinalizar').click();
-    console.log("%c Prueba de dualidad ejecutada.", "color: #FFA007;");
+    console.log("%c Prueba de dualidad ejecutada con nombre 'test'.", "color: #FFA007;");
 })("Geoventis", "Aqualis");
