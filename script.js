@@ -3,33 +3,56 @@
 ================================ */
 const afinidades = {
     Verde_Geoventis: { total: 0, color: '#4CAF50', maxTeorico: 16.5 },
-    Rojo_Ignivita: { total: 0, color: '#F44336', maxTeorico: 18.2 },
+    Rojo_Ignivita: { total: 0, color: '#F44336', maxTeorico: 15.7 },
     Azul_Aqualis: { total: 0, color: '#2196F3', maxTeorico: 17.5 },
-    Violeta_Nousomir: { total: 0, color: '#9C27B0', maxTeorico: 16.4 },
-    Negro_Obscurnis: { total: 0, color: '#333333', maxTeorico: 17.2 },
+    Violeta_Nousomir: { total: 0, color: '#9C27B0', maxTeorico: 16.8 },
+    Negro_Obscurnis: { total: 0, color: '#cbcbcb77', maxTeorico: 16.2 }, 
     Ámbar_Radiaris: { total: 0, color: '#FFA007', maxTeorico: 14.8 },
-    Amarillo_Ampérion: { total: 0, color: '#FFEB3B', maxTeorico: 11.5 },
-    Blanco_Kenobaryx: { total: 0, color: '#FFFFFF', maxTeorico: 18.5 },
-    Rosa_Zoëris: { total: 0, color: '#E91E63', maxTeorico: 15.9 },
-    Gris_Marron_Anthonum: { total: 0, color: '#795548', maxTeorico: 14.5 }
+    Amarillo_Ampérion: { total: 0, color: '#FFEB3B', maxTeorico: 13.5 },
+    Blanco_Kenobaryx: { total: 0, color: '#FFFFFF', maxTeorico: 17.2 },
+    Rosa_Zoëris: { total: 0, color: '#E91E63', maxTeorion: 15.1 },
+    Gris_Marron_Anthonum: { total: 0, color: '#795548', maxTeorico: 15.3 }
 };
 
-// Configuración de escala
 const TECHO_ESCALA = 25; 
 
 function normalizarNombre(id) {
     return id.replace(/_/g, ' ');
 }
 
+/* ==========================================
+   GESTIÓN DE PROGRESO, SONIDOS Y ESTADOS
+========================================== */
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        // 1. Reproducir sonido de click
+        const clickSound = document.getElementById('snd-click');
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {}); // Evita errores si el navegador bloquea
+        }
+
+        // 2. Actualizar barra de progreso global
+        const respondidasArr = new Set();
+        document.querySelectorAll('input[type="radio"]:checked').forEach(r => respondidasArr.add(r.name));
+        const progreso = (respondidasArr.size / 15) * 100;
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) progressBar.style.width = progreso + '%';
+        
+        // 3. Marcar la pregunta visualmente
+        radio.closest('.pregunta').classList.add('respondida');
+    });
+});
+
 /* ================================
    SUMA Y EQUILIBRADO
 ================================ */
 function sumarAfinidades(puntosEntrada) {
-    for (let nombreAura in puntosEntrada) {
-        const valorPuntos = puntosEntrada[nombreAura];
+    for (let claveCorta in puntosEntrada) {
+        const valorPuntos = puntosEntrada[claveCorta];
+        // Buscamos la coincidencia en el objeto afinidades (ej: "Geoventis" en "Verde_Geoventis")
         for (let claveCompleta in afinidades) {
-            if (claveCompleta.includes(nombreAura)) {
-                // Compensación basada en el máximo teórico particular
+            if (claveCompleta.includes(claveCorta)) {
                 const factorRescale = 20 / afinidades[claveCompleta].maxTeorico;
                 afinidades[claveCompleta].total += (valorPuntos * factorRescale);
             }
@@ -46,18 +69,18 @@ function calcularResultadosFinal() {
     const segundaCandidata = ordenadas[1];
     
     let secundaria = null;
-    
-    // Margen de 2.0 para ser secundaria (Exigente para permitir latentes)
     const diferencia = principal[1].total - segundaCandidata[1].total;
+    
+    // Margen de 1.5 para permitir dualidad
     if (diferencia <= 1.5) {
         secundaria = segundaCandidata;
     }
 
-    // Latentes: Superan el 65% y no son principal/secundaria
+    // Latentes: Superan el 67.1% y no son principal/secundaria
     const latentes = ordenadas.filter(a => 
         a[0] !== principal[0] && 
         (!secundaria || a[0] !== secundaria[0]) && 
-        (a[1].total / TECHO_ESCALA) >= 0.65
+        (a[1].total / TECHO_ESCALA) > 0.671
     );
 
     return { principal, secundaria, ranking: ordenadas, latentes };
@@ -69,10 +92,25 @@ function calcularResultadosFinal() {
 function mostrarResultados(res) {
     const contenedor = document.getElementById('resultado');
 
+    // Sonido final
+    const finalSound = document.getElementById('snd-final');
+    if (finalSound) finalSound.play().catch(() => {});
+
+    // Brillo especial para sintonía única
+    if (!res.secundaria) {
+        contenedor.classList.add('resultado-unico');
+    } else {
+        contenedor.classList.remove('resultado-unico');
+    }
+
+    const estiloLatente = res.secundaria 
+    ? 'filter: saturate(0.6) brightness(0.9); opacity: 0.8;' 
+    : 'text-shadow: 0 0 5px rgba(255,255,255,0.2);';
+
     let html = `
-        <div style="text-align: center; margin-bottom: 40px; border: 2px solid ${res.principal[1].color}; padding: 25px; border-radius: 20px; background: rgba(0,0,0,0.3); box-shadow: 0 0 20px ${res.principal[1].color}33;">
+        <div style="text-align: center; margin-bottom: 40px; border: 2px solid ${res.principal[1].color}; padding: 25px; border-radius: 20px; background: rgba(0,0,0,0.3); box-shadow: 0 0 25px ${res.principal[1].color}44;">
             <p style="letter-spacing: 4px; font-size: 0.75rem; opacity: 0.8; margin-bottom: 10px;">AURA PREDOMINANTE</p>
-            <h2 style="font-size: 2.8rem; color: ${res.principal[1].color}; text-shadow: 0 0 20px ${res.principal[1].color}88; margin: 0;">
+            <h2 style="font-size: 2.8rem; color: ${res.principal[1].color}; text-shadow: 0 0 20px ${res.principal[1].color}88; margin: 0; font-weight: 800;">
                 ${normalizarNombre(res.principal[0]).toUpperCase()}
             </h2>
             
@@ -87,21 +125,20 @@ function mostrarResultados(res) {
 
             ${res.latentes.length > 0 ? `
                 <div style="margin-top: 30px; padding-top: 15px; border-top: 1px dotted rgba(255,255,255,0.1);">
-                    ${res.secundaria ? `
-                        <p style="font-size: 0.7rem; color: #6dff44; letter-spacing: 1px; margin-bottom: 10px;">AURAS LATENTES DETECTADAS</p>
-                        <p style="font-size: 0.8rem; color: #f21b1b; margin-bottom: 10px;">Sin embargo, el cuerpo humano solo soporta un máximo de dos auras. <br> <strong>Esencias bloqueadas:</strong></p>
-                    ` : `
-                        <p style="font-size: 0.75rem; color: #6dff44; letter-spacing: 1px; margin-bottom: 5px;">AURAS LATENTES DETECTADAS</p>
-                        <p style="font-size: 0.8rem; color: #eee; margin-bottom: 10px;">Esencias despertables:</p>
-                    `}
-                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                        ${res.latentes.map(a => `<span style="color: ${a[1].color}; font-weight: bold; font-size: 0.95rem;">${normalizarNombre(a[0])}</span>`).join(' <span style="color:rgba(255,255,255,0.2)">|</span> ')}
+                    <p style="font-size: 0.75rem; color: #6dff44; letter-spacing: 1px; margin-bottom: 5px;">AURAS LATENTES DETECTADAS</p>
+                    ${res.secundaria ? `<p style="font-size: 0.8rem; color: #f21b1b; margin-bottom: 12px; font-weight: bold;">Sin embargo, el cuerpo humano solo es capaz de soportar dos tipos de aura. Esencias bloqueadas:</p>` : `<p style="font-size: 0.8rem; color: #eee; margin-bottom: 12px;">Esencias emergentes:</p>`}
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        ${res.latentes.map(a => `
+                            <span style="color: ${a[1].color}; font-weight: bold; font-size: 0.95rem; ${estiloLatente}">
+                                ${normalizarNombre(a[0])}
+                            </span>
+                        `).join(' <span style="color:rgba(255,255,255,0.1)">|</span> ')}
                     </div>
                 </div>
             ` : ''}
         </div>
 
-        <div class="ranking-container" style="background: rgba(0,0,0,0.4); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);">
+        <div class="ranking-container">
             <h4 style="margin-bottom: 25px; text-align: center; color: #00E5FF; font-size: 0.9rem; letter-spacing: 2px;">ESPECTRO DE AFINIDAD COMPLETO</h4>
     `;
 
@@ -116,28 +153,38 @@ function mostrarResultados(res) {
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 6px;">
                     <span style="font-weight: bold; opacity: 0.9; display: flex; align-items: center;">
                         ${normalizarNombre(item[0]).toUpperCase()}
-                        ${esPerfecto ? `<span class="badge-perfect" style="margin-left: 8px; font-size: 0.55rem; background: ${item[1].color}; color: #000000; padding: 1px 4px; border-radius: 3px; font-weight: black;">Aura de sintonía absoluta</span>` : ''}
+                        ${esPerfecto ? `<span class="badge-perfect" style="margin-left: 8px; font-size: 0.55rem; background: ${item[1].color}; color: #000; padding: 2px 5px; border-radius: 3px; font-weight: 900;">SINTONÍA ABSOLUTA</span>` : ''}
                     </span>
-                    <span style="color: ${item[1].color}; font-family: monospace; ${esPerfecto ? 'text-shadow: 0 0 8px ' + item[1].color : ''}">
-                        ${porcentaje}%
-                    </span>
+                    <span style="color: ${item[1].color}; font-family: 'Courier New', monospace; font-weight: bold;">${porcentaje}%</span>
                 </div>
-                <div style="background: rgba(255,255,255,0.05); border-radius: 20px; height: 7px; overflow: hidden; border: 1px solid ${esPerfecto ? item[1].color : 'rgba(255,255,255,0.05)'};">
-                    <div style="width: ${porcentaje}%; background: ${item[1].color}; height: 100%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: ${esPerfecto ? '0 0 15px ' + item[1].color : '0 0 8px ' + item[1].color + '66'};"></div>
+                <div style="background: rgba(255,255,255,0.05); border-radius: 20px; height: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); position: relative;">
+                    <div class="ranking-bar-inner" style="width: ${porcentaje}%; background: ${item[1].color}; height: 100%; transition: width 1.5s ease-out; box-shadow: 0 0 10px ${item[1].color}44;"></div>
                 </div>
             </div>
         `;
     });
 
-    html += `</div>`;
+    html += `
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="button" id="btnReiniciar" style="background: transparent; border: 2px solid #F45B69; color: #F45B69; padding: 10px 25px; box-shadow: none; font-size: 0.8rem; cursor: pointer;">
+                REINICIAR TEST
+            </button>
+        </div>
+    </div>`;
+
     contenedor.innerHTML = html;
     contenedor.scrollIntoView({ behavior: 'smooth' });
+
+    document.getElementById('btnReiniciar').addEventListener('click', () => {
+        window.location.reload();
+    });
 }
 
 /* ================================
-   MANEJADOR DE EVENTO
+   MANEJADOR DE EVENTO PRINCIPAL
 ================================ */
 document.getElementById('btnFinalizar').addEventListener('click', () => {
+    // Resetear puntuaciones
     Object.keys(afinidades).forEach(key => afinidades[key].total = 0);
 
     const preguntas = document.querySelectorAll('.pregunta');
@@ -150,14 +197,12 @@ document.getElementById('btnFinalizar').addEventListener('click', () => {
                 const puntos = JSON.parse(seleccion.getAttribute('data-puntos'));
                 sumarAfinidades(puntos);
                 respondidas++;
-            } catch (e) {
-                console.error("Error en data-puntos:", e);
-            }
+            } catch (e) { console.error("Error en data-puntos:", e); }
         }
     });
 
     if (respondidas < 15) {
-        alert("El test está incompleto. Responde las 15 preguntas.");
+        alert("El espectro está incompleto. Responde las 15 preguntas para sintonizar tu aura.");
         return;
     }
 

@@ -1,3 +1,5 @@
+RELLENA EL TEST COMPLETO ALEATORIAMENTE
+
 (function() {
     const preguntas = document.querySelectorAll('.pregunta');
     preguntas.forEach(div => {
@@ -10,3 +12,51 @@
     document.getElementById('btnFinalizar').click();
     console.log("¡Test completado aleatoriamente!");
 })();
+
+RELLENA EL TEST, CONSIGUIENDO EL 100% DE UN AURA
+
+(function(auraDeseada) {
+    // 1. Reseteamos todos los totales a cero
+    Object.keys(afinidades).forEach(key => afinidades[key].total = 0);
+
+    // 2. Inyectamos el valor exacto del TECHO_ESCALA al aura elegida
+    // Esto garantiza el 100% matemático
+    if (afinidades[auraDeseada]) {
+        afinidades[auraDeseada].total = TECHO_ESCALA;
+    } else {
+        // Por si escribes mal el nombre (ej: "Verde_Geoventis")
+        const clave = Object.keys(afinidades).find(k => k.includes(auraDeseada));
+        if (clave) afinidades[clave].total = TECHO_ESCALA;
+    }
+
+    // 3. (Opcional) Añadimos una latente al 70% para probar el mensaje de "Despertable"
+    const otraAura = Object.keys(afinidades).find(k => !k.includes(auraDeseada));
+    afinidades[otraAura].total = TECHO_ESCALA * 0.7;
+
+    // 4. Llamamos directamente a la función de renderizado
+    const resultados = calcularResultadosFinal();
+    mostrarResultados(resultados);
+
+    console.log(`%c [DEBUG] Modo Sintonía Pura activado para: ${auraDeseada}`, "color: #FFEB3B; background: #000; padding: 5px;");
+})("Geoventis"); // <-- Cambia aquí el nombre
+
+
+PROBAR LATENTES
+
+(function(aura1, aura2) {
+    const preguntas = document.querySelectorAll('.pregunta');
+    preguntas.forEach(pregunta => {
+        const opciones = Array.from(pregunta.querySelectorAll('input[type="radio"]'));
+        
+        // Elige opciones que den puntos a aura1 o aura2
+        const opcionDual = opciones.find(opt => {
+            const pts = JSON.parse(opt.getAttribute('data-puntos'));
+            return pts[aura1] > 0 || pts[aura2] > 0;
+        }) || opciones[0];
+
+        opcionDual.checked = true;
+    });
+    
+    document.getElementById('btnFinalizar').click();
+    console.log("%c Prueba de dualidad ejecutada.", "color: #FFA007;");
+})("Geoventis", "Aqualis");
